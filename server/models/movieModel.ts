@@ -5,7 +5,7 @@ import { BaseModel } from "./baseModel";
 @Entity()
 export class MovieEntity extends BaseModel {
   @PrimaryGeneratedColumn("uuid")
-  id!: number;
+  id!: string;
 
   @Column()
   url!: string;
@@ -25,6 +25,6 @@ export class MovieEntity extends BaseModel {
   @Column()
   image!: string;
 
-  @OneToMany(() => GenreEntity, (genre) => genre.id)
+  @OneToMany(() => GenreEntity, (genre) => genre.movies)
   genres!: GenreEntity[];
 }

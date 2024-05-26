@@ -1,5 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BaseModel } from "./baseModel";
+import { MovieEntity } from "./movieModel";
 
 @Entity()
 export class GenreEntity extends BaseModel {
@@ -8,4 +9,7 @@ export class GenreEntity extends BaseModel {
 
   @Column()
   title!: string;
+
+  @ManyToOne(() => MovieEntity, (movie) => movie.genres)
+  movies!: MovieEntity[];
 }

@@ -18,10 +18,6 @@ myDatasource
   .then(() => console.log("Database connected"))
   .catch((e) => console.log("failed to connect database", e));
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express + TypeScript Server");
-});
-
 app.use(errorHandler);
 
 //Routes
