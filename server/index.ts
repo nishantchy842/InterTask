@@ -1,10 +1,11 @@
 import express, { Express, Request, Response } from "express";
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 import { myDatasource } from "./config/dataSource";
 import genreRouter from "./routes/genreRoute";
 import bodyParser from "body-parser";
 import errorHandler from "./middleware/errorMiddleware";
 import movieRouter from "./routes/movieRoute";
+import cors from "cors";
 
 dotenv.config();
 
@@ -12,6 +13,12 @@ const app: Express = express();
 const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
+
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+  })
+);
 
 myDatasource
   .initialize()
