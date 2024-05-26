@@ -1,9 +1,10 @@
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { GenreEntity } from "./genreModel";
+import { BaseModel } from "./baseModel";
 
 @Entity()
-export class MovieEntity {
-  @PrimaryGeneratedColumn()
+export class MovieEntity extends BaseModel {
+  @PrimaryGeneratedColumn("uuid")
   id!: number;
 
   @Column()
@@ -13,9 +14,9 @@ export class MovieEntity {
   title!: string;
 
   @Column()
-  year!: Date;
+  year!: number;
 
-  @Column()
+  @Column("float")
   rating!: number;
 
   @Column()
