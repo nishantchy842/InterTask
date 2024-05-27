@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { genreRepo, movieRepo } from "../helper/repo";
 import { MovieEntity } from "../models/movieModel";
 import { ILike } from "typeorm";
+import { GenreEntity } from "../models/genreModel";
 
 export const loadMovieData = async (req: Request, res: Response) => {
   try {
@@ -19,33 +20,32 @@ export const loadMovieData = async (req: Request, res: Response) => {
         year,
         rating,
         summary,
-        background_image_original,
+        background_image_original: image,
         genres,
       } = movie;
 
-      const dbgenres = [];
+      const dbgenres: GenreEntity[] = [];
 
-      for (const genre of genres) {
-        const g = await genreRepo.findOne({
-          where: { title: genre },
+      for (const genreTitle of genres) {
+        let genre = await genreRepo.findOne({
+          where: { title: genreTitle },
         });
 
-        if (g) {
-          dbgenres.push(g);
-        } else {
-          const ge = genreRepo.save({
-            title: genre,
-          });
+        if (!genre) {
+          genre = genreRepo.create({ title: genreTitle });
+          await genreRepo.save(genre);
         }
+
+        dbgenres.push(genre);
       }
 
       const newMovie = movieRepo.create({
-        title,
         url,
-        rating,
-        image: background_image_original,
+        title,
         year,
+        rating,
         summary,
+        image,
         genres: dbgenres,
       });
 
