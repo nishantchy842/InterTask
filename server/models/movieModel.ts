@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
 import { GenreEntity } from "./genreModel";
 import { BaseModel } from "./baseModel";
 
@@ -25,6 +32,7 @@ export class MovieEntity extends BaseModel {
   @Column()
   image!: string;
 
-  @OneToMany(() => GenreEntity, (genre) => genre.movies)
+  @ManyToMany(() => GenreEntity, (genre) => genre.movies)
+  @JoinTable()
   genres!: GenreEntity[];
 }
