@@ -33,6 +33,26 @@ export const createGenre = async (
   }
 };
 
+//get all genre
+export const listofgenre = async (req: Request, res: Response) => {
+  try {
+    const data = await genreRepo.find({
+      order: { title: "ASC" },
+    });
+
+    return res.status(200).send({
+      message: "api fetch",
+      success: true,
+      data,
+    });
+  } catch (error) {
+    return res.status(500).send({
+      message: "Internal Server error",
+      success: false,
+    });
+  }
+};
+
 interface DeleteResponse {
   message: string;
   status: boolean;

@@ -2,6 +2,8 @@ import axios from "axios";
 import { Request, Response } from "express";
 import { genreRepo, movieRepo } from "../helper/repo";
 import { MovieEntity } from "../models/movieModel";
+import { ILike } from "typeorm";
+import { GenreEntity } from "../models/genreModel";
 
 export const loadMovieData = async (req: Request, res: Response) => {
   try {
@@ -18,33 +20,32 @@ export const loadMovieData = async (req: Request, res: Response) => {
         year,
         rating,
         summary,
-        background_image_original,
+        background_image_original: image,
         genres,
       } = movie;
 
-      const dbgenres = [];
+      const dbgenres: GenreEntity[] = [];
 
-      for (const genre of genres) {
-        const g = await genreRepo.findOne({
-          where: { title: genre },
+      for (const genreTitle of genres) {
+        let genre = await genreRepo.findOne({
+          where: { title: genreTitle },
         });
 
-        if (g) {
-          dbgenres.push(g);
-        } else {
-          const ge = genreRepo.save({
-            title: genre,
-          });
+        if (!genre) {
+          genre = genreRepo.create({ title: genreTitle });
+          await genreRepo.save(genre);
         }
+
+        dbgenres.push(genre);
       }
 
       const newMovie = movieRepo.create({
-        title,
         url,
-        rating,
-        image: background_image_original,
+        title,
         year,
+        rating,
         summary,
+        image,
         genres: dbgenres,
       });
 
@@ -64,10 +65,24 @@ export const getAllMovie = async (
   res: Response
 ): Promise<MovieEntity[] | any> => {
   try {
+    const { title } = req.query;
+
+    if (title) {
+      const data = await movieRepo.find({
+        relations: ["genres"],
+        where: { title: ILike(`%${title}%`) },
+      });
+
+      return res.status(200).json({
+        message: "api success",
+        success: true,
+        data,
+      });
+    }
+
     const data = await movieRepo.find({
       relations: ["genres"],
     });
-    console.log(data);
 
     return res.status(200).json({
       success: true,
