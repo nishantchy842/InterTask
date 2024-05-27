@@ -15,9 +15,7 @@ export const Home = () => {
     <div className=" ">
       <ul className="divide-y divide-slate-100 grid grid-cols-2 gap-[20px] md:grid-cols-2 sm:grid-cols-1">
         {allMovie.map((item) => (
-          <a href={"/" + item.id} key={item.id}>
-            <MovieCard movie={item} />
-          </a>
+          <MovieCard movie={item} key={item.id} />
         ))}
       </ul>
     </div>
