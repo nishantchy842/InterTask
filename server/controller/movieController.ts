@@ -2,6 +2,7 @@ import axios from "axios";
 import { Request, Response } from "express";
 import { genreRepo, movieRepo } from "../helper/repo";
 import { MovieEntity } from "../models/movieModel";
+import { ILike } from "typeorm";
 
 export const loadMovieData = async (req: Request, res: Response) => {
   try {
@@ -64,10 +65,24 @@ export const getAllMovie = async (
   res: Response
 ): Promise<MovieEntity[] | any> => {
   try {
+    const { title } = req.query;
+
+    if (title) {
+      const data = await movieRepo.find({
+        relations: ["genres"],
+        where: { title: ILike(`%${title}%`) },
+      });
+
+      return res.status(200).json({
+        message: "api success",
+        success: true,
+        data,
+      });
+    }
+
     const data = await movieRepo.find({
       relations: ["genres"],
     });
-    console.log(data);
 
     return res.status(200).json({
       success: true,
