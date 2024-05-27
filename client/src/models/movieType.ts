@@ -1,13 +1,13 @@
 export type MovieType = {
-  id: number;
+  id: string;
   title: string;
   year: number;
-  genre: string[];
+  genres: GenreType[];
   rating: number;
   director: string;
-  actors: string[];
+  summary: string;
   plot: string;
-  poster: string;
+  image: string;
   trailer: string;
   runtime: number;
   awards: string;
@@ -16,4 +16,9 @@ export type MovieType = {
   boxOffice: string;
   production: string;
   website: string;
+};
+
+export type GenreType = {
+  title: string;
+  id: string;
 };

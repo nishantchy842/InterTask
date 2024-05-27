@@ -1,5 +1,6 @@
+import { ReactNode } from "react";
+
 export type NavType = {
-  title: string;
+  title: string | ReactNode;
   href: string;
-  isActive: boolean;
 };
