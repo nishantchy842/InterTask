@@ -20,32 +20,39 @@ export const loadMovieData = async (req: Request, res: Response) => {
         year,
         rating,
         summary,
-        background_image_original: image,
+        background_image_original,
         genres,
       } = movie;
 
       const dbgenres: GenreEntity[] = [];
 
-      for (const genreTitle of genres) {
-        let genre = await genreRepo.findOne({
-          where: { title: genreTitle },
+      for (const genre of genres) {
+        const g = await genreRepo.findOne({
+          where: { title: genre },
         });
 
-        if (!genre) {
-          genre = genreRepo.create({ title: genreTitle });
-          await genreRepo.save(genre);
-        }
+        if (g) {
+          dbgenres.push(g);
+        } else {
+          const ge = await genreRepo.save({
+            title: genre,
+          });
 
-        dbgenres.push(genre);
+          const a = await genreRepo.findOne({
+            where: { title: ge.title },
+          });
+
+          a && dbgenres.push(a);
+        }
       }
 
       const newMovie = movieRepo.create({
-        url,
         title,
-        year,
+        url,
         rating,
+        image: background_image_original,
+        year,
         summary,
-        image,
         genres: dbgenres,
       });
 
