@@ -6,6 +6,8 @@ import bodyParser from "body-parser";
 import errorHandler from "./middleware/errorMiddleware";
 import movieRouter from "./routes/movieRoute";
 import cors from "cors";
+import swaggerUi from "swagger-ui-express";
+import swaggerDoc from "./swagger.json";
 
 dotenv.config();
 
@@ -31,6 +33,9 @@ app.use(errorHandler);
 
 app.use("/genre", genreRouter);
 app.use("/movie", movieRouter);
+
+//swagger config
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

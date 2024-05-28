@@ -1,0 +1,164 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Weakly evaluation task",
+    "description": "",
+    "version": "1.0"
+  },
+  "produces": ["application/json"],
+  "paths": {
+    "/genre": {
+      "post": {
+        "x-swagger-router-controller": "genre",
+        "operationId": "index",
+        "tags": ["Genre"],
+        "parameters": [
+          {
+            "name": "title",
+            "in": "body",
+            "required": true,
+            "items": {
+              "type": "string"
+            },
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "default": "genre title"
+                }
+              }
+            }
+          }
+        ],
+
+        "responses": {}
+      }
+    },
+    "/genre/": {
+      "get": {
+        "summary": "get all genre",
+        "x-swagger-router-controller": "genre",
+        "operationId": "allgenre",
+        "tags": ["Genre"],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/genre/{id}": {
+      "delete": {
+        "summary": "delete genre",
+        "x-swagger-router-controller": "genre",
+        "operationId": "delete genre",
+        "tags": ["Genre"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "place genre id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/movie/load": {
+      "post": {
+        "summary": "Intially: load all data from third party api to own database ",
+        "x-swagger-router-controller": "movie",
+        "operationId": "allmovie",
+        "tags": ["Movie"],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/movie": {
+      "get": {
+        "summary": "get all movie",
+        "x-swagger-router-controller": "movie",
+        "operationId": "allmovie",
+        "tags": ["Movie"],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/movie/new": {
+      "get": {
+        "summary": "get all lates movie",
+        "x-swagger-router-controller": "movie",
+        "operationId": "latestmovie",
+        "tags": ["Movie"],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/movie/toprated": {
+      "get": {
+        "summary": "get all top rated movies",
+        "x-swagger-router-controller": "movie",
+        "operationId": "topRatedMovie",
+        "tags": ["Movie"],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/movie/genre/{genre}": {
+      "get": {
+        "summary": "get all top rated movies",
+        "x-swagger-router-controller": "movie",
+        "operationId": "getbygenre",
+        "tags": ["Movie"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "genre",
+            "in": "path",
+            "required": true,
+            "description": "Genre of the movies to retrieve",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/movie/{id}": {
+      "get": {
+        "summary": "get single movie",
+        "x-swagger-router-controller": "movie",
+        "operationId": "moviebyid",
+        "tags": ["Movie"],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "movie id",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {}
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "api_key",
+      "in": "header"
+    }
+  }
+}
