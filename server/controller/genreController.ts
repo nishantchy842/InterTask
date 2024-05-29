@@ -2,6 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { genreRepo } from "../helper/repo";
 import { AppError } from "../handler/customeErrorHandler";
 
+export const sum = (a: any, b: any) => {
+  return a + b;
+};
+
 export const createGenre = async (
   req: Request,
   res: Response,
@@ -11,10 +15,7 @@ export const createGenre = async (
     const { title } = req.body;
 
     if (!title) {
-      return res.status(400).json({
-        message: "title is required",
-        status: false,
-      });
+      throw new AppError("title is required", 400);
     }
 
     const data = genreRepo.create({
@@ -34,7 +35,11 @@ export const createGenre = async (
 };
 
 //get all genre
-export const listofgenre = async (req: Request, res: Response) => {
+export const listofgenre = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const data = await genreRepo.find({
       order: { title: "ASC" },
@@ -46,10 +51,7 @@ export const listofgenre = async (req: Request, res: Response) => {
       data,
     });
   } catch (error) {
-    return res.status(500).send({
-      message: "Internal Server error",
-      success: false,
-    });
+    next(error);
   }
 };
 
@@ -62,14 +64,20 @@ export const deleteGenre = async (
   req: Request,
   res: Response,
   next: NextFunction
-): Promise<Response<DeleteResponse> | void> => {
+) => {
   try {
     const { id } = req.params;
 
-    const data = await genreRepo.delete(id);
+    const data = await genreRepo.findOne({ where: { id } });
 
-    if (data.affected === 0) {
-      throw new AppError("Genre not found", 404);
+    if (!data) {
+      throw new AppError("Genre not found", 400);
+    }
+
+    const affect = await genreRepo.delete(id);
+
+    if (affect.affected == 0) {
+      return new AppError("failed to delete", 500);
     }
 
     return res.status(200).json({
