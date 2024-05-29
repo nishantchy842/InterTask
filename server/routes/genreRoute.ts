@@ -8,7 +8,7 @@ import {
 const router = express.Router();
 
 router.route("/").post(createGenre);
+router.route("/:id").delete(deleteGenre);
 router.route("/").get(listofgenre);
-router.delete("/:id", deleteGenre);
 
 export default router;
