@@ -42,5 +42,9 @@ Initially :- Run this api to load all data in own database
 `npm run test`
 
 
+#api docs
+
+http://localhost:8080/api-docs/
+
 ![screenshot (4)](https://github.com/nishantchy842/InterTask/assets/117557072/59f42368-9a47-43e3-ae8c-be07bee85322)
 
