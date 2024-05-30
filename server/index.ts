@@ -33,6 +33,9 @@ myDatasource
 app.use("/genre", genreRouter);
 app.use("/movie", movieRouter);
 
+//swagger config
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
+
 // Catch-all route for handling invalid URLs
 app.use((req: Request, res: Response) => {
   res.status(404).json({
@@ -43,9 +46,6 @@ app.use((req: Request, res: Response) => {
 });
 
 app.use(ErrorHandler);
-
-//swagger config
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDoc));
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
