@@ -9,6 +9,7 @@ import cors from "cors";
 import swaggerUi from "swagger-ui-express";
 import swaggerDoc from "./swagger.json";
 import ErrorHandler from "./middleware/errorMiddleware";
+import { responseInterceptor } from "./middleware/responseInterceptors";
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ const app: Express = express();
 const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
+app.use(responseInterceptor);
 
 app.use(
   cors({

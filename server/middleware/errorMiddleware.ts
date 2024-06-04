@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { AppError } from "../handler/customeErrorHandler";
+import { responseMessage } from "../utils/responsemessage";
 
 // ErrorHandler.js
 const ErrorHandler = (
@@ -9,11 +10,8 @@ const ErrorHandler = (
   next: NextFunction
 ) => {
   const errStatus = err.statusCode || 500;
-  const errMsg = err.message || "Something went wrong";
   res.status(errStatus).json({
-    success: false,
-    status: errStatus,
-    message: errMsg,
+    message: err.message || responseMessage(err.statusCode),
   });
 };
 
