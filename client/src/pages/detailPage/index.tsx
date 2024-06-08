@@ -1,17 +1,14 @@
 import { useState } from "react";
 import { useMovieDetails } from "../../hook";
+import CustomSpinner from "../../components/customSpinner";
 
 export default function DetailsPage() {
   const [detailsData, loading] = useMovieDetails();
 
   const [lineClamp, setLineClamp] = useState(false);
 
-  if (loading) {
-    return <p>loading......</p>;
-  }
-
   return (
-    <section className={``}>
+    <CustomSpinner spinning={loading}>
       <div className=" relative">
         <img src={detailsData?.image} alt="/" className=" w-full" />
         <div className=" absolute bottom-0 p-[60px] text-white">
@@ -42,6 +39,6 @@ export default function DetailsPage() {
           </div>
         </div>
       </div>
-    </section>
+    </CustomSpinner>
   );
 }

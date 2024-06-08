@@ -1,25 +1,18 @@
-import { Request, Response, NextFunction } from "express";
+import { NextFunction, Request, Response } from "express";
 import { AppError } from "../handler/customeErrorHandler";
+import { responseMessage } from "../utils/responsemessage";
 
-const errorHandler = (
+// ErrorHandler.js
+const ErrorHandler = (
   err: AppError,
   req: Request,
   res: Response,
   next: NextFunction
-): Response => {
-  console.error(err);
-
-  if (err.isOperational) {
-    return res.status(err.statusCode).json({
-      success: false,
-      message: err.message,
-    });
-  }
-
-  return res.status(500).json({
-    success: false,
-    message: "Internal Server Error",
+) => {
+  const errStatus = err.statusCode || 500;
+  res.status(errStatus).json({
+    message: err.message || responseMessage(err.statusCode),
   });
 };
 
-export default errorHandler;
+export default ErrorHandler;

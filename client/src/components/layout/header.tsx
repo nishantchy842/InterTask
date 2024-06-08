@@ -68,7 +68,11 @@ function Nav({ children, href }: PropsType) {
               {data &&
                 data.map((item) => {
                   return (
-                    <div className="py-1" role="none" key={item.id}>
+                    <div
+                      className="py-1 hover:bg-slate-300"
+                      role="none"
+                      key={item.id}
+                    >
                       <a
                         href={`/genre/${item.title}`}
                         className="text-gray-700 block px-4 py-2 text-sm"

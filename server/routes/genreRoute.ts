@@ -1,14 +1,12 @@
 import express from "express";
-import {
-  createGenre,
-  deleteGenre,
-  listofgenre,
-} from "../controller/genreController";
+import { genreController } from "../controller/genreController";
 
 const router = express.Router();
 
-router.route("/").post(createGenre);
-router.route("/").get(listofgenre);
-router.delete("/:id", deleteGenre);
+router.route("/").post(genreController.createGenre);
+router.route("/:id").patch(genreController.updateGenre);
+router.route("/:id").delete(genreController.deleteGenre);
+router.route("/:id").get(genreController.getSingleGenre);
+router.get("/", genreController.getAllGenre);
 
 export default router;

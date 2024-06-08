@@ -1,82 +1,81 @@
 import { NextFunction, Request, Response } from "express";
-import { genreRepo } from "../helper/repo";
-import { AppError } from "../handler/customeErrorHandler";
+import { genreServices } from "../services/genreServices";
 
-export const createGenre = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  try {
-    const { title } = req.body;
+export const sum = (a: any, b: any) => {
+  return a + b;
+};
 
-    if (!title) {
-      return res.status(400).json({
-        message: "title is required",
-        status: false,
-      });
+class GenreController {
+  async getAllGenre(req: Request, res: Response): Promise<Response> {
+    try {
+      const data = await genreServices.getAllGenre();
+      return res.status(200).json({ data, success: true });
+    } catch (error) {
+      return res.status(500).json({ message: "Error fetching genres", error });
     }
-
-    const data = genreRepo.create({
-      title,
-    });
-
-    await genreRepo.save(data);
-
-    return res.status(200).json({
-      message: "created successfully",
-      success: true,
-      data,
-    });
-  } catch (error) {
-    next(error);
   }
-};
 
-//get all genre
-export const listofgenre = async (req: Request, res: Response) => {
-  try {
-    const data = await genreRepo.find({
-      order: { title: "ASC" },
-    });
+  async getSingleGenre(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | any> {
+    try {
+      const { id } = req.params;
+      const genre = await genreServices.getSingleGenre(id);
 
-    return res.status(200).send({
-      message: "api fetch",
-      success: true,
-      data,
-    });
-  } catch (error) {
-    return res.status(500).send({
-      message: "Internal Server error",
-      success: false,
-    });
+      return res.status(200).json({
+        data: genre,
+      });
+    } catch (error) {
+      next(error);
+    }
   }
-};
 
-interface DeleteResponse {
-  message: string;
-  status: boolean;
+  async createGenre(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | any> {
+    try {
+      const { title } = req.body;
+      const genre = await genreServices.createGenre(title);
+
+      return res.status(201).json({ data: genre });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateGenre(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | any> {
+    try {
+      const data = await genreServices.updateGenre(
+        req.params.id,
+        req.body.title
+      );
+      return res.status(201).json({ data });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteGenre(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<Response | any> {
+    try {
+      const data = await genreServices.deleteGenre(req.params.id);
+
+      return res.status(200).json({ data });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
 
-export const deleteGenre = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<Response<DeleteResponse> | void> => {
-  try {
-    const { id } = req.params;
-
-    const data = await genreRepo.delete(id);
-
-    if (data.affected === 0) {
-      throw new AppError("Genre not found", 404);
-    }
-
-    return res.status(200).json({
-      message: "Deleted successfully",
-      status: true,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
+export const genreController = new GenreController();
